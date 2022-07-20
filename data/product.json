@@ -1,0 +1,50 @@
+[
+    {
+        "id": "P101",
+        "name": "Men T-shirt",
+        "description":"Black men t-shirt",
+        "keywords": ["men","black","t-shirt"],
+        "price": "Tk. 1200",
+        "image":
+            {
+                "url": "tshirt.png"
+            }
+    },
+    {
+        "id": "P102",
+        "name": "Men Jacket",
+        "description":"Men black jacket",
+        "price": "Tk. 1500",
+        "image":
+            {
+                "url": "jacket.png"
+            }
+    },
+    {
+        "id": "P103",
+        "name": "Casio S001",
+        "description":"Casio men sport watch",
+        "price": "Tk. 5000",
+        "availability":"Spring",
+        "keywords": ["sport watch","men"],
+        "image":
+            {
+                "url": "sport_watch.jpeg"
+            }
+    },
+    {
+        "id": "P104",
+        "name": "Lotto Men01",
+        "description":"Lotto men formal shoe",
+        "price": "Tk. 3000",
+        "image":
+        {
+            "url": "formal_shoe.jpeg"
+        } 
+    },
+    {
+        "id": "P104",
+        "name": "Lotto Casual01",
+        "description":"Comming soon.."
+    }
+]

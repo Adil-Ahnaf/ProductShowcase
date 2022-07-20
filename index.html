@@ -1,0 +1,210 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Showcase</title>
+
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+
+</head>
+<body>
+
+    <div class="container border border-success border-5 rounded-3 bg-light mt-5" style="height: 500px; width: 750px;">
+        <div class="border border-dark border-4 bg-light mt-5 ms-2" style="height: 300px; width: 300px; float: left;">
+            <img src="img/no_image.jpg" alt="" style="object-fit: fill; height: 100%; width: 100%;"> 
+        </div>
+
+        <div id="display" class="mt-5 ms-5" style="height: 300px; width: 300px; float: left;">
+            <!-- product details will visible -->
+        </div>
+
+        <div class="d-flex justify-content-evenly" style="height: 50px; width: 300px; margin-top: 55%;">
+            <button type="button" class="btn btn-primary" id="prev" style="display: none;">Previous</button>
+            <button type="button" class="btn btn-success" id="play">Play</button>
+            <button type="button" class="btn btn-primary" id="next">Show</button>
+        </div>
+    </div>
+
+</body>
+<script src="js/bootstrap.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+
+        var product_list = [];
+        var index = 0;
+        var myInterval;
+
+        //......>> collect data form json file<<.........
+        $.getJSON('data/product.json', { get_param: 'value' }, function(product) {
+            product_list = product;
+            console.log("List:",product_list);
+        });
+       
+
+        //......>> click next button <<............
+        $(document).on("click", "#next", function(){
+
+            if (index <= (product_list.length)-1) {
+                //...display previous button......
+                $("#prev").css("display", "block");
+                $("#next").text("Next");
+
+
+                //.....display product details.......
+                if(product_list[index].name){
+                    $('#display').html('<p> Product Name: ' + product_list[index].name + '</p>');
+                }
+                if(product_list[index].description){
+                    $('#display').append('<p> Description: ' + product_list[index].description + '</p>');
+                }
+                if(product_list[index].availability){
+                    $('#display').append('<p> Availability: ' + product_list[index].availability + '</p>');
+                }
+                if(product_list[index].keywords){
+                    
+                    $('#display').append('<p> keywords: ' + product_list[index].keywords.join(", ") + '</p>');
+                }
+                if(product_list[index].price){
+                    $('#display').append('<p> Price: ' + product_list[index].price + '</p>');
+                }
+
+                if (product_list[index].image) {
+                    var img_url = 'img/'+product_list[index].image.url;
+                    //console.log(img_url);
+                    $('img').attr('src', img_url);  
+                } else {
+                    $('img').attr('src', 'img/no_image.jpg');
+                }
+
+                index++;
+                console.log(index);
+            }else{
+                alert("No more product left!");
+            }
+        });
+
+
+
+        //......>> click previous button <<..........
+        $(document).on("click", "#prev", function () {
+        
+            if (index === 1) {
+                alert("No more product left!");
+
+            }
+            
+            else{
+
+                index--;
+                console.log(index);
+
+                if (index > 0) {
+                        
+                        //.....display product details.......
+                        if(product_list[index-1].name){
+                            $('#display').html('<p> Product Name: ' + product_list[index-1].name + '</p>');
+                        }
+                        if(product_list[index-1].description){
+                            $('#display').append('<p> Description: ' + product_list[index-1].description + '</p>');
+                        }
+                        if(product_list[index-1].availability){
+                            $('#display').append('<p> Availability: ' + product_list[index-1].availability + '</p>');
+                        }
+                        if(product_list[index-1].keywords){
+                            $('#display').append('<p> keywords: ' + product_list[index-1].keywords.join(", ") + '</p>');
+                        }
+                        if(product_list[index-1].price){
+                            $('#display').append('<p> Price: ' + product_list[index-1].price + '</p>');
+                        }
+
+                        if (product_list[index-1].image) {
+                            var img_url = 'img/'+product_list[index-1].image.url;
+                            //console.log(img_url);
+                            $('img').attr('src', img_url);  
+                        } else {
+                            $('img').attr('src', 'img/no_image.jpg');
+                        }
+                    }
+            } 
+        });
+
+        //.........>> click play/pause button <<.........
+        $(document).on("click", "#play", function () {
+
+            //....already play product details.....
+            if ($("#play").hasClass("active")) {
+                
+                $("#play").text("Play");
+                $("#play").removeClass("btn btn-danger active");
+                $("#play").addClass("btn btn-success");
+                clearInterval(myInterval);
+            }
+            //......button in a pause state....
+            else {
+                if (index === 0 ) {
+                    $("#play").text("Pause");
+                    $("#play").removeClass("btn btn-success");
+                    $("#play").addClass("btn btn-danger active");
+                    displayProduct();
+                }
+                $("#play").text("Pause");
+                $("#play").removeClass("btn btn-success");
+                $("#play").addClass("btn btn-danger active");
+                myInterval = setInterval(displayProduct, 3000);   
+            }
+                
+        });
+
+
+        //.......>> auto product display <<....
+        function displayProduct() {
+            if (index < product_list.length) {
+                console.log("Index: "+ index + " Product: "+ product_list[index].name);
+                
+                //...display previous button......
+                $("#prev").css("display", "block");
+                $("#next").text("Next");
+
+
+                //.....display product details.......
+                if(product_list[index].name){
+                    $('#display').html('<p> Product Name: ' + product_list[index].name + '</p>');
+                }
+                if(product_list[index].description){
+                    $('#display').append('<p> Description: ' + product_list[index].description + '</p>');
+                }
+                if(product_list[index].availability){
+                    $('#display').append('<p> Availability: ' + product_list[index].availability + '</p>');
+                }
+                if(product_list[index].keywords){
+                    
+                    $('#display').append('<p> keywords: ' + product_list[index].keywords.join(", ") + '</p>');
+                }
+                if(product_list[index].price){
+                    $('#display').append('<p> Price: ' + product_list[index].price + '</p>');
+                }
+
+                if (product_list[index].image) {
+                    var img_url = 'img/'+product_list[index].image.url;
+                    //console.log(img_url);
+                    $('img').attr('src', img_url);  
+                } else {
+                    $('img').attr('src', 'img/no_image.jpg');
+                }
+
+                index++;  
+            }else {
+                clearInterval(myInterval);
+                $("#play").text("Play");
+                $("#play").removeClass("btn btn-danger active");
+                $("#play").addClass("btn btn-success");
+                alert("No more product left!");
+            }
+            
+        };
+    });
+</script>
+</html>
